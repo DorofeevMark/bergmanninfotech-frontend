@@ -1,0 +1,44 @@
+<h1 mat-dialog-title class="text-center">Create chart</h1>
+<div mat-dialog-content class="text-center">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field class="w-100 mb-4">
+      <mat-label>Title</mat-label>
+      <input matInput [formControl]="title">
+      <mat-error *ngIf="title.hasError('required')">
+        Title is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <p>
+        <b>Select measures to include:</b>
+      </p>
+      <div class="d-flex flex-column">
+        <div class="d-flex justify-content-between align-items-center" *ngFor="let control of measures; let i = index">
+          <mat-checkbox class="text-left mr-4 w-25" [formControl]="control">
+            {{measureTypes[i].name | titlecase}}
+          </mat-checkbox>
+          <mat-form-field class="mr-2">
+            <mat-label>Chart type</mat-label>
+            <mat-select [formControl]="charts[i]">
+              <mat-option *ngFor="let type of chartTypes" [value]="type">
+                {{type | titlecase}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div>
+            <div [style.backgroundColor]="colors[i]"
+                 [cpPosition]="'bottom'"
+                 [cpPositionOffset]="'50%'"
+                 [cpPositionRelativeToArrow]="true"
+                 [(colorPicker)]="colors[i]"
+                 class="color-picker-wrapper"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions class="d-flex justify-content-center">
+  <button mat-raised-button color="primary" class="mr-4" [disabled]="!form.valid" (click)="onSubmit()">Create</button>
+  <button mat-raised-button color="warn" (click)="onNoClick()">Close</button>
+</div>
